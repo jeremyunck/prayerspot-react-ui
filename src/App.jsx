@@ -1,25 +1,30 @@
-import { useState } from 'react'
-import Axios from 'axios'
-import './App.css'
+import { useState, useEffect } from "react";
+import Axios from "axios";
+import Popup from "./components/Popup";
+import UserPostForm from "./components/UserPostForm";
+import UserPostsListed from "./components/UserPostsListed";
+
+import "./App.css";
 
 function App() {
-  const[user, setUser] = useState()
-  const getPosts = () => {
-    Axios.get("http://localhost:8080/mediaPost/all").then((response) => {
-      console.log(response)
-      setUser(response.data[0].id)
-    })
-  }
+  const [buttonPopup, setButtonPopup] = useState(false);
+  const [userPosts, setUserPosts] = useState([]);
+
   return (
     <div className="App">
-      <h2>PrayerSpot UI</h2>
-      <button onClick={getPosts}>Get Posts</button>
-      <div>
-        {user}
-      </div>
+      <main>
+        <h2>PrayerSpot</h2>
+        <button onClick={() => setButtonPopup(true)}>New Post</button>
+        <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+          <UserPostForm></UserPostForm>
+        </Popup>
+        <UserPostsListed
+          userPosts={userPosts}
+          setUserPosts={setUserPosts}
+        ></UserPostsListed>
+      </main>
     </div>
-
-  )
+  );
 }
 
-export default App
+export default App;
